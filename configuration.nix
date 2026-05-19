@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, flashvim, ... }:
 
 {
   imports = [
@@ -14,8 +14,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];	
-  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -104,7 +104,7 @@
   programs.firefox.enable = true;
 
   programs.steam.enable = true;
-  
+
   programs.hyprland.enable = true;
 
   # Allow unfree packages
@@ -114,7 +114,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     vesktop
     git
     hyprpaper
@@ -126,6 +126,7 @@
     mako
     kitty
     zed-editor
+    flashvim.packages."${system}".nvim
 #  wget
   ];
 
