@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   lib,
   config,
@@ -13,11 +9,36 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./network.nix
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable = true;
+      device = "nodev"; # obligatoire en UEFI
+      efiSupport = true;
+      useOSProber = true;
+      extraConfig = "GRUB_DISABLE_OS_PROBER=false";
+      extraEntries = ''
+        menuentry "Arch Linux" {
+          insmod part_gpt
+          insmod btrfs
+          insmod lvm
+          search --no-floppy --fs-uuid --set=root A5EC-16FE
+          linux /vmlinuz-linux root=/dev/ArchinstallVg/root rootflags=subvol=@ rw quiet
+          initrd /intel-ucode.img /initramfs-linux.img
+        }
+      '';
+      minegrub-theme = {
+        enable = true;
+        splash = "100% Flakes !";
+        background = "background_options/1.21.6 - [Chase the Skies].png";
+        boot-options-count = 4;
+      };
+    };
+  };
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -26,6 +47,11 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # secrets
+  age = {
+    identityPaths = [ "/etc/nixos/age/key" ];
+  };
 
   networking.hostName = "oui"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
