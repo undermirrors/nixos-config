@@ -2,19 +2,27 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, flashvim, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  flashvim,
+  ...
+}:
 
 {
   imports = [
     ./hardware-configuration.nix
   ];
 
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -29,10 +37,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Europe/Paris";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "fr_FR.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -54,6 +59,11 @@
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+
+  environment.plasma6.excludePackages = [
+    pkgs.kdePackages.dolphin
+    pkgs.kdePackages.dolphin-plugins
+  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -90,27 +100,33 @@
   users.users.tristantrad = {
     isNormalUser = true;
     description = "tristantrad";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25518 AAAAC3NzaC1lZDI1NTE5AAAAIEsUW2xv34veXK20S9Mxvmo9jtN8fsOYKx2Amk6HiMCA lolXlangouste@hotmail.com"
     ];
+    shell = pkgs.zsh;
+
     packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
+      # for this user only
     ];
   };
 
-  # Install firefox.
   programs.firefox.enable = true;
-
   programs.steam.enable = true;
-
   programs.hyprland.enable = true;
+  programs.zsh.enable = true;
+  programs.direnv.enable = true;
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "steam"
+      "steam-unwrapped"
+    ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -127,7 +143,7 @@
     kitty
     zed-editor
     flashvim.packages."${system}".nvim
-#  wget
+    #  wget
   ];
 
   fonts.packages = with pkgs; [

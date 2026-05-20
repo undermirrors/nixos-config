@@ -31,7 +31,7 @@
         "QT_QPA_PLATFORM,wayland;xcb"
         "QT_QPA_PLATFORMTHEME,qt5ct"
       ];
-      
+
       bind = [
         "$mainMod, Return, exec, kitty"
         "$mainMod SHIFT, A, killactive,"
