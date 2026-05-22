@@ -26,5 +26,6 @@ update:
 edit_secret SECRET_NAME:
     cd secrets && sudo EDITOR=nvim agenix -i /etc/nixos/age/key -e oui/{{SECRET_NAME}}.age && cd ..
 
-cc COMMIT_MESSAGE:
+# Quick Config Commit for nixos
+qcc COMMIT_MESSAGE:
     git add * && git commit -m "{{COMMIT_MESSAGE}}"

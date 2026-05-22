@@ -50,6 +50,7 @@ in
           };
         };
       in
+      mkWifi "qOnyx" {} //
       {
         eduroam = {
           connection = {
