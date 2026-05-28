@@ -10,6 +10,7 @@
   imports = [
     ./hardware-configuration.nix
     ./network.nix
+    ./zsh.nix
   ];
 
   # Bootloader.
@@ -133,7 +134,6 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25518 AAAAC3NzaC1lZDI1NTE5AAAAIEsUW2xv34veXK20S9Mxvmo9jtN8fsOYKx2Amk6HiMCA lolXlangouste@hotmail.com"
     ];
-    shell = pkgs.zsh;
 
     packages = with pkgs; [
       # for this user only

@@ -51,6 +51,7 @@ in
         };
       in
       mkWifi "qOnyx" {} //
+      mkWifi "Onyx" {} //
       {
         eduroam = {
           connection = {

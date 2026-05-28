@@ -15,7 +15,7 @@
   programs = {
     ssh = {
       enable = true;
-      matchBlocks = {
+      settings = {
         "github.com" = {
           hostname = "github.com";
           identityFile = "~/.ssh/tristantrad_key";
