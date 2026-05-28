@@ -145,6 +145,11 @@
   programs.hyprland.enable = true;
   programs.zsh.enable = true;
   programs.direnv.enable = true;
+  programs.nh {
+    enable = true;
+    clean.enable =true;
+    clean.extraArgs = "--keep-since 5d --keep 3"
+  }
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate =
